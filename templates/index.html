@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文本分类</title>
+<!-- Bootstrap CSS和JavaScript引入   -->
+<!--    这些引入用于使用Bootstrap框架，提供了一些样式和交互元素，使页面看起来更加美观和响应式。-->
+    <link rel="stylesheet" href="/static/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<!--页面标题和背景-->
+<body background="/static/view.jpeg">
+<div class="container">
+    <div style="text-align: center">
+        <h1 style="font-family: 'Heiti SC';font-size: 90px">文本分类系统</h1>{# 字体需要修改 #}
+        <p style="font-size: 30px">文本分类模型：CNN NaiveBayes </p>
+    </div>
+</div>
+<div class="col-md-2"></div>
+<div class="col-md-8">
+<!--这是一个包含文本输入框、下拉列表和提交按钮的表单。用户可以在文本框中输入文本，选择要使用的模型类型（卷积神经网络、朴素贝叶斯、长短期记忆网络），然后单击“提交”按钮。-->
+<form method="post" class="form-inline">
+    {% csrf_token %}
+    <div class="form-group col-md-3">
+        <textarea class="form-control" rows="20" cols="30" placeholder="输入需要分类的文本信息" name="data">{{ data }}</textarea>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-3">
+        <div class="row">
+        <br>
+        <br>
+        <select name="type">
+<!--            <option value="svm">支持向量机</option>-->
+            <option value="dl">卷积神经网络</option>
+            <option value="nb">朴素贝叶斯</option>
+<!--            <option value="lstm">长短期记忆网络</option>-->
+        </select>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+        <input type="submit" class="form-control" value="提交">
+        </div>
+    </div>
+<!--这是一个展示模型结果的表格。每次用户提交文本后，系统会将结果添加到表格中，显示使用不同模型的分类结果。-->
+    <div class="form-group">
+        <table class="table table-striped" style="font-size: 20px">
+            <thead>
+            <tr>
+                <th>模型</th>
+                <th>|</th>
+                <th>结果</th>
+            </tr>
+            </thead>
+<!--            动态数据绑定：-->
+<!--这部分使用了Django模板语言的语法，用于在表格中动态显示从服务器端获取的结果。在这个例子中，r_set是从服务器端传递到模板的一个包含结果的列表-->
+            <tbody>
+            {% for r in r_set %}
+            <tr>
+            <td>{{ r.model }}</td>
+                <td>|</td>
+            <td>{{ r.result }}</td>
+            </tr>
+            {% endfor %}
+            
+            </tbody>
+        </table>
+
+    </div>
+
+</form>
+
+</div>
+<div class="col-md-2"></div>
+</body>
+</html>
